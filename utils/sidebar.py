@@ -41,13 +41,24 @@ def render_sidebar():
             'text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Time range</p>',
             unsafe_allow_html=True,
         )
-        range_option = st.selectbox("Preset", list(TIME_RANGES.keys()) + ["Custom date range"], label_visibility="collapsed")
+        options = list(TIME_RANGES.keys()) + ["Custom date range"]
+        saved_range = st.session_state.get("_range_option", "Last 7 days")
+        default_idx = options.index(saved_range) if saved_range in options else 0
+        range_option = st.selectbox("Preset", options, index=default_idx, label_visibility="collapsed", key="_range_option")
         if range_option == "Custom date range":
             col1, col2 = st.columns(2)
             with col1:
-                start = st.date_input("Start", value=date.today() - timedelta(days=30))
+                start = st.date_input(
+                    "Start",
+                    value=st.session_state.get("_custom_start", date.today() - timedelta(days=30)),
+                    key="_custom_start",
+                )
             with col2:
-                end = st.date_input("End", value=date.today())
+                end = st.date_input(
+                    "End",
+                    value=st.session_state.get("_custom_end", date.today()),
+                    key="_custom_end",
+                )
         else:
             days = TIME_RANGES[range_option]
             end = date.today()

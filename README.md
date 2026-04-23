@@ -14,7 +14,7 @@ A Streamlit-in-Snowflake dashboard for monitoring Cortex AI feature usage, costs
 
 ## Prerequisites
 
-- Snowflake account (Enterprise edition or higher recommended)
+- Snowflake account
 - ACCOUNTADMIN role (or a role with `IMPORTED PRIVILEGES` on the `SNOWFLAKE` database)
 - A compute pool for container runtime (or use an existing one like `SYSTEM_COMPUTE_POOL_CPU`)
 - An external access integration for PyPI packages (e.g., `PYPI_ACCESS_INTEGRATION`)
@@ -146,6 +146,10 @@ deploy.sh                      # Automated deployment script
 - **Budget defaults**: The Alerts & Forecast page lets users set budget targets interactively
 - **Credit rate**: Automatically fetched from `RATE_SHEET_DAILY`; displays "N/A" if unavailable
 - **Cache TTL**: Query results cached for 10 minutes; use the sidebar **Refresh data** button to clear cache
+
+## Regenerating with Cortex Code
+
+The file [`PROMPT.md`](PROMPT.md) contains the full prompt used to generate this app with [Cortex Code](https://docs.snowflake.com/en/user-guide/cortex-code/cortex-code). You can paste it into a Cortex Code session to recreate or customize the app from scratch.
 
 ## Notes
 
