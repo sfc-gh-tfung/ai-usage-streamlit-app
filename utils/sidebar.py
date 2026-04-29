@@ -9,8 +9,31 @@ TIME_RANGES = {
     "Last 90 days": 90,
 }
 
+OPTIONS = list(TIME_RANGES.keys()) + ["Custom date range"]
+
+
+def _store_range():
+    st.session_state["saved_range"] = st.session_state["_w_range"]
+
+
+def _store_start():
+    st.session_state["saved_start"] = st.session_state["_w_start"]
+
+
+def _store_end():
+    st.session_state["saved_end"] = st.session_state["_w_end"]
+
 
 def render_sidebar():
+    if "saved_range" not in st.session_state:
+        st.session_state["saved_range"] = "Last 7 days"
+    if "saved_start" not in st.session_state:
+        st.session_state["saved_start"] = date.today() - timedelta(days=30)
+    if "saved_end" not in st.session_state:
+        st.session_state["saved_end"] = date.today()
+
+    st.session_state["_w_range"] = st.session_state["saved_range"]
+
     with st.sidebar:
         st.markdown(
             '<div style="text-align:center;padding:20px 0 12px 0;">'
@@ -41,24 +64,21 @@ def render_sidebar():
             'text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Time range</p>',
             unsafe_allow_html=True,
         )
-        options = list(TIME_RANGES.keys()) + ["Custom date range"]
-        saved_range = st.session_state.get("_range_option", "Last 7 days")
-        default_idx = options.index(saved_range) if saved_range in options else 0
-        range_option = st.selectbox("Preset", options, index=default_idx, label_visibility="collapsed", key="_range_option")
+        range_option = st.selectbox(
+            "Preset",
+            OPTIONS,
+            label_visibility="collapsed",
+            key="_w_range",
+            on_change=_store_range,
+        )
         if range_option == "Custom date range":
+            st.session_state["_w_start"] = st.session_state["saved_start"]
+            st.session_state["_w_end"] = st.session_state["saved_end"]
             col1, col2 = st.columns(2)
             with col1:
-                start = st.date_input(
-                    "Start",
-                    value=st.session_state.get("_custom_start", date.today() - timedelta(days=30)),
-                    key="_custom_start",
-                )
+                start = st.date_input("Start", key="_w_start", on_change=_store_start)
             with col2:
-                end = st.date_input(
-                    "End",
-                    value=st.session_state.get("_custom_end", date.today()),
-                    key="_custom_end",
-                )
+                end = st.date_input("End", key="_w_end", on_change=_store_end)
         else:
             days = TIME_RANGES[range_option]
             end = date.today()

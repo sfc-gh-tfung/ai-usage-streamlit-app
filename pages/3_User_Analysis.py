@@ -12,8 +12,8 @@ inject_css()
 
 st.header("User analysis")
 
-start_date = st.session_state.get("start_date", (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"))
-end_date = st.session_state.get("end_date", datetime.now().strftime("%Y-%m-%d"))
+start_date = st.session_state["start_date"]
+end_date = st.session_state["end_date"]
 credit_rate = st.session_state.get("credit_rate") or get_credit_rate()
 
 st.caption("ACCOUNT_USAGE views have up to 45-minute latency.")

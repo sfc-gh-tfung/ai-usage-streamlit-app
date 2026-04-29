@@ -17,9 +17,9 @@ render_sidebar()
 
 hero_banner("❄️ AI on Snowflake", "Snowflake AI Cost and Usage Monitoring")
 
-start_date = st.session_state.get("start_date", (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d"))
-end_date = st.session_state.get("end_date", datetime.now().strftime("%Y-%m-%d"))
-days = st.session_state.get("days", 7)
+start_date = st.session_state["start_date"]
+end_date = st.session_state["end_date"]
+days = st.session_state["days"]
 credit_rate = st.session_state.get("credit_rate") or get_credit_rate()
 
 prev_end = start_date
